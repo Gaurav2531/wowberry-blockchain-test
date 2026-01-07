@@ -157,3 +157,96 @@ wowberry-blockchain-test/
 ## License
 
 MIT
+
+
+
+# UTXO Model vs Account Model
+
+## What is UTXO?
+
+**UTXO** = Unspent Transaction Output
+**UTXO (Unspent Transaction Output)**: Bitcoin's model that tracks individual transaction outputs.  
+**Account Model**: Ethereum/BNB model that tracks account balances directly.
+A blockchain accounting method where transactions consume previous outputs and create new ones.
+
+## Quick Comparison
+
+| Aspect | UTXO Model | Account Model |
+|--------|------------|---------------|
+| **Used By** | Bitcoin, Cardano | Ethereum, BNB Chain |
+| **How It Works** | Tracks individual coins/outputs | Tracks account balances |
+| **Balance** | Sum of unspent outputs | Direct balance value |
+| **Privacy** | Better (new addresses) | Lower (same address) |
+| **Complexity** | Higher | Lower |
+| **Smart Contracts** | Difficult | Easy |
+
+## Simple Examples
+
+### UTXO Model (Bitcoin)
+```
+Alice has 5 BTC in 2 outputs:
+- Output 1: 3 BTC
+- Output 2: 2 BTC
+
+Alice sends 4 BTC to Bob:
+- Input: 3 BTC + 2 BTC = 5 BTC
+- Output 1: 4 BTC to Bob
+- Output 2: 1 BTC change to Alice
+- Old outputs destroyed, new outputs created
+```
+
+### Account Model (Ethereum/BNB)
+```
+Alice balance: 5 BNB
+Bob balance: 0 BNB
+
+Alice sends 4 BNB to Bob:
+- Alice: 5 - 4 = 1 BNB
+- Bob: 0 + 4 = 4 BNB
+- Simple balance update
+```
+
+## Why We Use Account Model
+
+Our Fund Manager contract uses **Account Model** because:
+
+1. ✅ Deployed on BNB Chain (EVM)
+2. ✅ Requires smart contract logic
+3. ✅ Easier for DApps
+4. ✅ Better user experience
+```solidity
+// Our implementation - Account Model
+mapping(address => uint256) public balances;
+
+function deposit() external payable {
+    balances[msg.sender] += msg.value;
+}
+
+function withdraw(uint256 amount) external {
+    balances[msg.sender] -= amount;
+}
+```
+
+## Transaction History
+
+While using Account Model, we maintain transaction logs for auditability:
+```solidity
+struct Transaction {
+    uint256 id;
+    address user;
+    uint256 amount;
+    string txType;
+    uint256 timestamp;
+}
+```
+
+This combines:
+- ✅ Account Model simplicity
+- ✅ UTXO-style audit trail
+
+## Key Takeaway
+
+**UTXO** = Like physical cash (individual bills)  
+**Account** = Like bank account (one balance)
+
+We chose Account Model because it's the standard for EVM smart contracts and provides the best experience for our DApp.
