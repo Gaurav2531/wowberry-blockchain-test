@@ -1,0 +1,24 @@
+{
+  "name": "wowberry-blockchain-test",
+  "version": "1.0.0",
+  "description": "Blockchain fund management system",
+  "main": "index.js",
+  "scripts": {
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test"
+  },
+  "keywords": ["blockchain", "solidity", "ethereum"],
+  "author": "Gaurav",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "@nomicfoundation/hardhat-ethers": "^3.1.0",
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
+    "hardhat": "^2.19.0",
+    "chai": "^4.3.10"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "ethers": "^5.7.2"
+  }
+}

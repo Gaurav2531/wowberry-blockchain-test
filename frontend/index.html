@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fund Manager DApp</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Header -->
+       <!-- Header -->
+<header class="header">
+    <div class="header-content">
+        <h1>🏦 Fund Manager DApp</h1>
+        <div class="wallet-buttons">
+            <button id="connectWalletBtn" class="btn btn-connect">
+                <span id="walletStatus">🔌 Connect Wallet</span>
+            </button>
+            <button id="disconnectWalletBtn" class="btn btn-disconnect" style="display: none;">
+                🔴 Disconnect
+            </button>
+        </div>
+    </div>
+</header>
+
+        <!-- Wallet Info Section -->
+        <section class="card wallet-info" id="walletInfo" style="display: none;">
+            <h2>👛 Wallet Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Address:</span>
+                    <span class="value" id="userAddress">Not Connected</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Wallet Balance:</span>
+                    <span class="value" id="walletBalance">0 BNB</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Contract Balance:</span>
+                    <span class="value" id="contractBalance">0 BNB</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Network:</span>
+                    <span class="value" id="networkName">Unknown</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contract Connection -->
+        <section class="card" id="contractSection">
+            <h2>🔗 Connect to Contract</h2>
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    id="contractAddress" 
+                    class="input-field" 
+                    placeholder="Enter Contract Address (0x...)"
+                >
+                <button id="loadContractBtn" class="btn btn-primary">Load Contract</button>
+            </div>
+        </section>
+
+        <!-- Contract Info -->
+        <section class="card" id="contractInfoSection" style="display: none;">
+            <h2>📊 Contract Details</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Owner:</span>
+                    <span class="value" id="contractOwner">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Status:</span>
+                    <span class="value" id="contractStatus">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Total Transactions:</span>
+                    <span class="value" id="txCount">0</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Your Role:</span>
+                    <span class="value" id="userRole">User</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Actions Grid -->
+        <div class="actions-grid" id="actionsGrid" style="display: none;">
+            
+            <!-- Deposit Card -->
+            <div class="card action-card">
+                <h3>💵 Deposit</h3>
+                <p class="description">Deposit BNB into the contract</p>
+                <input 
+                    type="number" 
+                    id="depositAmount" 
+                    class="input-field" 
+                    placeholder="Amount (BNB)" 
+                    step="0.001"
+                    min="0.001"
+                >
+                <button id="depositBtn" class="btn btn-success btn-full">Deposit</button>
+            </div>
+
+            <!-- Withdraw Card -->
+            <div class="card action-card">
+                <h3>💸 Withdraw</h3>
+                <p class="description">Withdraw your deposited funds</p>
+                <input 
+                    type="number" 
+                    id="withdrawAmount" 
+                    class="input-field" 
+                    placeholder="Amount (BNB)" 
+                    step="0.001"
+                >
+                <button id="withdrawBtn" class="btn btn-warning btn-full">Withdraw</button>
+            </div>
+
+            <!-- Transfer Card -->
+            <div class="card action-card">
+                <h3>🔄 Transfer</h3>
+                <p class="description">Transfer to another address</p>
+                <input 
+                    type="text" 
+                    id="transferTo" 
+                    class="input-field" 
+                    placeholder="Recipient Address"
+                >
+                <input 
+                    type="number" 
+                    id="transferAmount" 
+                    class="input-field" 
+                    placeholder="Amount (BNB)" 
+                    step="0.001"
+                >
+                <button id="transferBtn" class="btn btn-info btn-full">Transfer</button>
+            </div>
+
+            <!-- Check Balance Card -->
+            <div class="card action-card">
+                <h3>💰 Check Balance</h3>
+                <p class="description">View any address balance</p>
+                <input 
+                    type="text" 
+                    id="checkBalanceAddress" 
+                    class="input-field" 
+                    placeholder="Address to check"
+                >
+                <button id="checkBalanceBtn" class="btn btn-secondary btn-full">Check Balance</button>
+                <div id="balanceResult" class="result-box"></div>
+            </div>
+
+            <!-- Whitelist Card (Owner Only) -->
+            <div class="card action-card" id="whitelistCard">
+                <h3>✅ Whitelist</h3>
+                <p class="description">Manage whitelisted addresses</p>
+                <input 
+                    type="text" 
+                    id="whitelistAddress" 
+                    class="input-field" 
+                    placeholder="Address"
+                >
+                <div class="button-group">
+                    <button id="addWhitelistBtn" class="btn btn-success">Add</button>
+                    <button id="removeWhitelistBtn" class="btn btn-danger">Remove</button>
+                    <button id="checkWhitelistBtn" class="btn btn-secondary">Check</button>
+                </div>
+                <div id="whitelistResult" class="result-box"></div>
+            </div>
+
+            <!-- Operator Card (Owner Only) -->
+            <div class="card action-card" id="operatorCard">
+                <h3>👮 Operators</h3>
+                <p class="description">Manage operator addresses</p>
+                <input 
+                    type="text" 
+                    id="operatorAddress" 
+                    class="input-field" 
+                    placeholder="Address"
+                >
+                <div class="button-group">
+                    <button id="addOperatorBtn" class="btn btn-success">Add</button>
+                    <button id="removeOperatorBtn" class="btn btn-danger">Remove</button>
+                    <button id="checkOperatorBtn" class="btn btn-secondary">Check</button>
+                </div>
+                <div id="operatorResult" class="result-box"></div>
+            </div>
+
+        </div>
+
+        <!-- Emergency Controls -->
+        <section class="card emergency-section" id="emergencySection" style="display: none;">
+            <h2>🚨 Emergency Controls</h2>
+            <div class="button-group">
+                <button id="pauseBtn" class="btn btn-danger">⏸ Pause Contract</button>
+                <button id="unpauseBtn" class="btn btn-success">▶ Unpause Contract</button>
+            </div>
+        </section>
+
+        <!-- Transaction History -->
+        <section class="card" id="historySection" style="display: none;">
+            <div class="section-header">
+                <h2>📜 Transaction History</h2>
+                <button id="refreshBtn" class="btn btn-secondary btn-sm">🔄 Refresh</button>
+            </div>
+            <div id="transactionList" class="transaction-list">
+                <p class="empty-state">No transactions yet</p>
+            </div>
+        </section>
+
+        <!-- Toast Notifications -->
+        <div id="toastContainer" class="toast-container"></div>
+
+    </div>
+
+    <footer class="footer">
+        <p>Fund Manager DApp | BNB Smart Chain Testnet</p>
+    </footer>
+
+    <!-- CRITICAL: Load Ethers.js BEFORE app.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
